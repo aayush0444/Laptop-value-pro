@@ -121,9 +121,9 @@ with tab_val:
             company = st.selectbox(
                 "Manufacturer",
                 ["Dell", "HP", "Lenovo", "Asus", "Acer", "MSI", "Apple", "Toshiba",
-                 "Samsung", "Razer", "Huawei", "Microsoft", "Google", "LG", "Xiaomi"],
+                 "Samsung", "Razer", "Huawei", "Microsoft", "Google", "LG", "Xiaomi", "Chuwi"],
             )
-            type_name = st.selectbox("Category", ["Notebook", "Ultrabook", "Gaming", "Workstation", "Netbook"])
+            type_name = st.selectbox("Category", ["Notebook", "Ultrabook", "Gaming", "Workstation", "Netbook", "2 in 1 Convertible"])
             os_sys = st.selectbox(
                 "Operating system",
                 ["Windows 11", "Windows 10", "Windows 7", "macOS", "Mac OS X", "Linux", "Chrome OS", "No OS"],
@@ -182,7 +182,8 @@ with tab_val:
         with cpu_col3:
             cpu_generation = st.selectbox(
                 "Generation",
-                [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+                [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+                index=6  # Default to 8th gen
             )
         
         with cpu_col4:
@@ -195,7 +196,8 @@ with tab_val:
                  "U (Ultra-Low Power)",
                  "Y (Extremely Low Power)",
                  "M (Mobile)",
-                 "T (Power Optimized)"]
+                 "T (Power Optimized)"],
+                index=4  # Default to U
             )
         
         cpu_clock_speed = st.slider("Base Clock Speed (GHz)", 1.0, 5.0, 2.5, 0.1)
@@ -217,12 +219,12 @@ with tab_val:
                 gpu_series = st.selectbox(
                     "GPU Series",
                     ["UHD Graphics", "Iris Xe Graphics", "HD Graphics", 
-                     "Iris Plus", "Iris Pro", "Iris"]
+                     "Iris Plus Graphics", "Iris Pro Graphics", "Iris Graphics"]
                 )
             elif gpu_company == "Nvidia":
                 gpu_series = st.selectbox(
                     "GPU Series",
-                    ["RTX 40 Series", "RTX 30 Series", "RTX 20 Series",
+                    ["RTX 50 Series", "RTX 40 Series", "RTX 30 Series", "RTX 20 Series",
                      "GTX 16 Series", "GTX 10 Series", "GTX 9 Series", 
                      "GTX 8 Series", "GTX 7 Series", "MX Series", 
                      "Quadro", "GeForce"]
@@ -240,7 +242,7 @@ with tab_val:
                 gpu_series = st.text_input("GPU Series", "Integrated")
         
         with gpu_col3:
-            gpu_model = st.text_input("GPU Model (e.g., 3060, 620)", "")
+            gpu_model = st.text_input("GPU Model (e.g., 3060, 620, 4090)", "")
 
         st.markdown("---")
         
@@ -380,8 +382,8 @@ with tab_val:
 
         except Exception as e:
             st.error(f"Prediction engine error: {e}")
-            st.write("Debug info:")
-            st.write(user_input)
+            with st.expander("Debug info"):
+                st.write(user_input)
 
 with tab_info:
     st.markdown(
@@ -390,20 +392,18 @@ with tab_info:
   <h3 style="margin-top:0;">Model & notes</h3>
   <ul style="margin-bottom:0; opacity:0.9;">
     <li>This is a data science project using structured laptop specs to estimate market value.</li>
-    <li>All inputs are now dropdown-based for accuracy and ease of use.</li>
-    <li>The model uses Gradient Boosting with 86.5% accuracy and MAE of ₹8,665.</li>
-    <li>Trained on 2017-2018 laptop data. Newer hardware (9th gen+, RTX series) uses intelligent price multipliers for accurate estimates.</li>
+    <li>All inputs are dropdown-based for accuracy and ease of use.</li>
+    <li>The model uses Gradient Boosting trained on 2,500+ laptops from 2017-2020.</li>
+    <li>Model accuracy: R² = 86.5%, Mean Absolute Error = ₹8,665</li>
     <li>Select specifications that match your laptop as closely as possible.</li>
+    <li>For best results, ensure all hardware specs are accurately selected.</li>
   </ul>
   
-  <h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Price Adjustment Factors</h4>
+  <h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Coverage</h4>
   <div style="opacity:0.85; font-size:0.9rem;">
-    <strong>CPU Generation:</strong> 9th-10th gen (+5%), 11th gen (+8%), 12th gen (+12%), 13th gen (+18%), 14th gen (+22%)<br>
-    <strong>CPU Tier:</strong> i9/Ryzen 9 (+15%), i7/Ryzen 7 (+5%)<br>
-    <strong>GPU Series:</strong> RTX 40 high-end (+35%), RTX 40 mid (+20%), RTX 30 high-end (+20%), RTX 3050/3060 (+8%)<br>
-    <strong>Displays:</strong> 4K (+12%), QHD+ (+6%), QHD (+4%)<br>
-    <strong>RAM:</strong> 32GB+ (+15%), 24GB (+8%), 16GB (+3%)<br>
-    <strong>Storage:</strong> 2TB+ SSD (+12%), 1TB SSD (+8%), 512GB SSD (+4%)
+    <strong>CPU:</strong> Intel 6th-14th gen, AMD Ryzen 1000-7000 series<br>
+    <strong>GPU:</strong> GTX 7/8/9/10/16 series, RTX 20/30/40/50 series, Radeon RX 5000/6000/7000<br>
+    <strong>Price Range:</strong> ₹15,000 - ₹400,000
   </div>
 </div>
 """,
